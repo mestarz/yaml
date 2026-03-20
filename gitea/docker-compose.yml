@@ -1,0 +1,22 @@
+services:
+  server:
+    image: gitea/gitea:1.21.7 # 建议锁定版本，迁移时更稳定
+    container_name: gitea
+    restart: always
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - GITEA__database__DB_TYPE=sqlite3 # 强制使用 SQLite，省去数据库容器
+    networks:
+      - gitea_net
+    volumes:
+      - ./data:/data                # 核心：所有代码和配置都在这，迁移只拷这个目录
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "9091:3000"                # 浏览器访问 9091 端口
+      - "2222:22"                  # Git SSH 使用 2222 端口，避开系统 SSH
+
+networks:
+  gitea_net:
+    driver: bridge
