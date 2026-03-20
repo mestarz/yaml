@@ -6,8 +6,8 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # ============ 1. 检查 Docker 环境 ============
 if ! command -v docker &>/dev/null; then
-  echo ">>> Docker 未安装，开始安装..."
-  curl -fsSL https://get.docker.com | sh
+  echo ">>> Docker 未安装，使用阿里云镜像安装..."
+  curl -fsSL https://get.docker.com | sh -s -- --mirror Aliyun
   systemctl enable --now docker
   echo ">>> Docker 安装完成"
 fi
