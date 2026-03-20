@@ -15,7 +15,7 @@ fi
 # 判断 compose 命令
 if docker compose version &>/dev/null; then
   COMPOSE="docker compose"
-elif command -v docker-compose &>/dev/null; then
+elif docker-compose version &>/dev/null; then
   COMPOSE="docker-compose"
 else
   echo ">>> docker-compose 未安装，开始安装..."
