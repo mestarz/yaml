@@ -34,6 +34,10 @@ EOF
 
 echo ">>> 拉取镜像并启动容器"
 cd "${DEPLOY_DIR}"
-docker compose up -d
+if docker compose version >/dev/null 2>&1; then
+  docker compose up -d
+else
+  docker-compose up -d
+fi
 
 echo ">>> 部署完成！访问地址: http://<服务器IP>:9091"
