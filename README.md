@@ -7,6 +7,7 @@
 | 目录 | 服务 | 说明 |
 |------|------|------|
 | [gitea/](gitea/) | Gitea | 轻量 Git 托管，SQLite 存储，端口 9091 |
+| [openvpn/](openvpn/) | OpenVPN | 一键安装 OpenVPN，来源 [Nyr/openvpn-install](https://github.com/Nyr/openvpn-install) |
 
 ## 使用方式
 
