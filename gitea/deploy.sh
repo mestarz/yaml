@@ -71,4 +71,11 @@ iptables -C DOCKER-USER -p tcp --dport 3000 -j DROP 2>/dev/null \
 iptables -C DOCKER-USER -p tcp --dport 22 -j DROP 2>/dev/null \
   || iptables -A DOCKER-USER -p tcp --dport 22 -j DROP
 
+# 持久化 iptables 规则，重启不丢失
+echo ">>> 持久化 iptables 规则"
+if ! dpkg -l iptables-persistent &>/dev/null; then
+  DEBIAN_FRONTEND=noninteractive apt-get install -y iptables-persistent
+fi
+netfilter-persistent save
+
 echo ">>> 部署完成！仅 VPN 网段可访问: http://10.8.0.x:9091"
