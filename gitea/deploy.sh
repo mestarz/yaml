@@ -59,4 +59,16 @@ echo ">>> 拉取镜像并启动容器"
 cd "${DEPLOY_DIR}"
 ${COMPOSE} up -d
 
-echo ">>> 部署完成！访问地址: http://<服务器IP>:9091"
+# ============ 5. 限制访问：仅允许 VPN 网段 10.8.0.0/24 ============
+echo ">>> 配置防火墙：仅允许 10.8.0.0/24 访问"
+# Docker 推荐使用 DOCKER-USER 链来过滤容器流量
+iptables -C DOCKER-USER -p tcp --dport 3000 -s 10.8.0.0/24 -j ACCEPT 2>/dev/null \
+  || iptables -I DOCKER-USER -p tcp --dport 3000 -s 10.8.0.0/24 -j ACCEPT
+iptables -C DOCKER-USER -p tcp --dport 22 -s 10.8.0.0/24 -j ACCEPT 2>/dev/null \
+  || iptables -I DOCKER-USER -p tcp --dport 22 -s 10.8.0.0/24 -j ACCEPT
+iptables -C DOCKER-USER -p tcp --dport 3000 -j DROP 2>/dev/null \
+  || iptables -A DOCKER-USER -p tcp --dport 3000 -j DROP
+iptables -C DOCKER-USER -p tcp --dport 22 -j DROP 2>/dev/null \
+  || iptables -A DOCKER-USER -p tcp --dport 22 -j DROP
+
+echo ">>> 部署完成！仅 VPN 网段可访问: http://10.8.0.x:9091"
